@@ -1,0 +1,7 @@
+create table Car(
+	CarId int NOT NULL IDENTITY(1,1),
+	Name varchar(255) NOT NULL,
+	Color varchar(255) NOT NULL,
+	CarKey int,
+	PRIMARY KEY (CarId)
+);
