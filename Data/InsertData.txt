@@ -1,5 +1,0 @@
-insert into Car (Name, Color, CarKey) 
-values ('Honda Civic', 'White', '03417');
-
-insert into Car (Name, Color, CarKey) 
-values ('Fiat Uno', 'Gray', '08341');

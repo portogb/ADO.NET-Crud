@@ -1,47 +1,55 @@
-﻿using ConsoleApp.DAO.Impl;
-using ConsoleApp.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ConsoleApp.Entities;
+using ConsoleApp.Service;
 
-namespace ConsoleApp
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        CarService service = new();
+
+        Car car0 = new Car
         {
-            CarImpl carImpl = new CarImpl();
+            Name = "Fiat Cronos",
+            Color = "Red",
+            CarKey = "00FG34",
+            FabricationYear = DateTime.Today
+        };
 
-            // SELECT BY ID
-            Car car = await carImpl.GetByIdAsync(1);
-            Console.WriteLine("Values");
-            System.Console.WriteLine($"{car.Id} | {car.Name} | {car.Color} | {car.CarKey}");
+        Car car = new Car
+        {
+            Name = "Fiat Mobi",
+            Color = "White",
+            CarKey = "0HF21P",
+            FabricationYear = DateTime.Now
+        };
 
-            // SELECT
-            List<Car> listCar = await carImpl.GetAllAsync();
-            System.Console.WriteLine("List");
-            foreach (var i in listCar)
-            {
-                System.Console.WriteLine($"{i.Id} | {i.Name} | {i.Color} | {i.CarKey}");
-            }
+        // CREATE
+        await service.SaveCar(car0);
+        await service.SaveCar(car);
 
-            // INSERT
-            // Car newCar = new Car("Fiat Toro", "Black", 00918);
-            Car newCar = new Car("Toyota Corolla", "Black", 34127);
-            int row0 = await carImpl.SaveAsync(newCar);
-            System.Console.WriteLine(row0);
+        // READ
+        Car readCar = await service.GetCar(1);
+        System.Console.WriteLine($"{readCar.Id} | {readCar.Name} | {readCar.Color} | {readCar.CarKey} | {readCar.FabricationYear}");
 
-            // UPDATE
-            // Car updateCar = new Car("Fiat Toro", "Black", 11918);
-            Car updateCar = new Car("Corolla", "Black", 34128);
-            int row1 = await carImpl.UpdateAsync(updateCar, 10);
-            System.Console.WriteLine(row1);
-            
-            // DELETE
-            int row2 = await carImpl.DeleteByIdAsync(10);
-            System.Console.WriteLine(row2);
+        // READ LIST
+        List<Car> cars = await service.GetAllCars();
+        foreach (Car i in cars)
+        {
+            System.Console.WriteLine($"{i.Id} | {i.Name} | {i.Color} | {i.CarKey} | {i.FabricationYear}");
         }
+
+        // UPDATE
+        Car c = new();
+        c.Name = "Fiat 500e";
+        c.Color = "Green";
+        c.CarKey = "2PHZI0";
+        c.FabricationYear = DateTime.Now;
+
+        await service.UpdateCar(1, c); 
+        await service.GetCar(1);
+        System.Console.WriteLine($"{c.Name} | {c.Color} | {c.CarKey} | {c.FabricationYear}");
+
+        // DELETE
+        await service.DeleteCar(2);
     }
 }
